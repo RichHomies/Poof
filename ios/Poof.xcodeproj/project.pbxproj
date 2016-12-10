@@ -32,7 +32,7 @@
 		9984C738B61E41A583ABDE79 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C28111D8F1294BB984A2313F /* Foundation.ttf */; };
 		A79343DA48C4497E91FB17C8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E971DC69852043968DFEAA0C /* Zocial.ttf */; };
 		B67187B81DFC9F6200EB31C9 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B67187B71DFC9F4A00EB31C9 /* libReactNativeNavigation.a */; };
-		B67187BB1DFCA16E00EB31C9 /* RCCManager.h in Frameworks */ = {isa = PBXBuildFile; fileRef = B67187BA1DFCA16E00EB31C9 /* RCCManager.h */; };
+		B67187E11DFCAE0800EB31C9 /* RCCManager.h in Frameworks */ = {isa = PBXBuildFile; fileRef = B67187BA1DFCA16E00EB31C9 /* RCCManager.h */; };
 		C2BC522525F14E3F9152AFA9 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0AC02C4A1754AE0B77707EB /* Ionicons.ttf */; };
 		C2ED65650C0E4D8C98AB5EFA /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A7A506F53994187BD9452A9 /* Entypo.ttf */; };
 /* End PBXBuildFile section */
@@ -244,7 +244,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B67187BB1DFCA16E00EB31C9 /* RCCManager.h in Frameworks */,
+				B67187E11DFCAE0800EB31C9 /* RCCManager.h in Frameworks */,
 				B67187B81DFC9F6200EB31C9 /* libReactNativeNavigation.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,

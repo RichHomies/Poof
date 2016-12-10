@@ -7,7 +7,7 @@ import {
   Alert,
   Platform
 } from 'react-native';
-import ChatInput from '../components/ChatInput';
+import SignUpScreen from './SignUpScreen';
 
 import { Container, Content, InputGroup, Input } from 'native-base';
 
@@ -28,14 +28,13 @@ export default class FirstTabScreen extends Component {
 
   constructor(props) {
     super(props);
-    // if you want to listen on navigator events, set this up
   }
 
 
   render() {
     return (
-      <View style={{flex: 1, padding: 20}}>
-        <ChatInput />
+      <View>
+        <SignUpScreen />
       </View>
       );
   }

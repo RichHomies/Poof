@@ -7,8 +7,8 @@ registerScreens();
 
 Navigation.startSingleScreenApp({
  screen: {
-   screen: 'example.FirstTabScreen',
-   title: 'Navigation',
+   screen: 'app.LoginScreen',
+   title: 'Poof',
    navigatorStyle: {
      navBarBackgroundColor: '#4dbce9',
      navBarTextColor: '#ffff00',
