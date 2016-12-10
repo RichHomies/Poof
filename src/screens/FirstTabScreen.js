@@ -7,6 +7,10 @@ import {
   Alert,
   Platform
 } from 'react-native';
+import ChatInput from '../components/ChatInput';
+
+import { Container, Content, InputGroup, Input } from 'native-base';
+
 import {Navigation} from 'react-native-navigation';
 
 export default class FirstTabScreen extends Component {
@@ -31,9 +35,9 @@ export default class FirstTabScreen extends Component {
   render() {
     return (
       <View style={{flex: 1, padding: 20}}>
-        <Text>Home</Text>
+        <ChatInput />
       </View>
-    );
+      );
   }
 
   onStartSingleScreenApp() {
