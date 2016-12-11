@@ -11,6 +11,10 @@ import {
   Alert,
   Platform
 } from 'react-native';
+import SignUpScreen from './SignUpScreen';
+
+import { Container, Content, InputGroup, Input } from 'native-base';
+
 import {Navigation} from 'react-native-navigation';
 
 export default class FirstTabScreen extends Component {
@@ -28,7 +32,6 @@ export default class FirstTabScreen extends Component {
 
   constructor(props) {
     super(props);
-    // if you want to listen on navigator events, set this up
   }
   componentWillMount(){
     let that = this;
@@ -39,10 +42,10 @@ export default class FirstTabScreen extends Component {
   }
   render() {
     return (
-      <View style={{flex: 1, padding: 20}}>
-        <Text>Home</Text>
+      <View>
+        <SignUpScreen />
       </View>
-    );
+      );
   }
 
   onStartSingleScreenApp() {
