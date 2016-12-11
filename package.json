@@ -13,6 +13,7 @@
     "react": "15.4.1",
     "react-native": "0.39.1",
     "react-native-navigation": "^2.0.0-experimental.152",
+    "react-native-uuid": "^1.4.9",
     "websocket": "^1.0.23"
   },
   "devDependencies": {

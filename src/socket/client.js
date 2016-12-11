@@ -6,25 +6,40 @@
 //     });
 //     socket.sendMessage('/joe', 'string');
 // });
+var uuid = require('react-native-uuid');
 
 var ws = require('./socketConnection');
 
 var SocketLibrary = function(socket){
     this.socket = socket;
+    this.openRequests = {
+      //uuid : cb
+    };
 };
 
 SocketLibrary.prototype.sendMessage = function(url, body){
-    var str = JSON.stringify({url: url, body:body});
+    var id = uuid.v1();
+    var str = JSON.stringify({id:id, url: url, body:body});
     this.socket.send(str);
+    return {
+      success: function(cb) {
+        this.openRequests[id] = cb;
+      }
+    }
 };
 
-SocketLibrary.prototype.subscribe = function(cb){
+SocketLibrary.prototype.subscribe = function(){
     this.socket.onmessage(function(message) {
-        var str = JSON.parse(message);
-        cb(str);
+        var obj = JSON.parse(message);
+        var fn = this.openRequests[obj.id];
+        fn(obj.body);
+        delete this.openRequests[obj.id]
+        // cb(obj);
             
     });  
 };
+
+
 
 ws.then(function(socket){
     var socketbiblioteca = new SocketLibrary(socket);
