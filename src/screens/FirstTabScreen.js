@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+
+import socketClient from '../socket/client';
+
+
 import {
   Text,
   View,
@@ -26,8 +30,13 @@ export default class FirstTabScreen extends Component {
     super(props);
     // if you want to listen on navigator events, set this up
   }
-
-
+  componentWillMount(){
+    let that = this;
+    socketClient.then(function(sc){
+      that.setState({socket:sc});
+      console.log('yuhhh')
+    });
+  }
   render() {
     return (
       <View style={{flex: 1, padding: 20}}>
