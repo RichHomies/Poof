@@ -20,21 +20,21 @@ SocketLibrary.prototype.sendMessage = function(url, body){
     var id = uuid.v1();
     var str = JSON.stringify({id:id, url: url, body: body});
     this.socket.send(str);
-    var that = this
+    var that = this;
     return {
       success: function(cb) {
         that.openRequests[id] = cb;
       }
-    }
+    };
 };
 
 SocketLibrary.prototype.subscribe = function(){
+    var that = this;
     this.socket.onmessage = function(message) {
-        //shit we stuck
-        console.log('message ', Object.keys(message.data));
-        var cb = this.openRequests[message.data.id];
-        cb(message.data.body);
-        delete this.openRequests[message.data.id]            
+        var data = JSON.parse(message.data);
+        var cb = that.openRequests[data.id];
+        cb(data.body);
+        delete that.openRequests[data.id];           
     };  
 };
 

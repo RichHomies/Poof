@@ -37,33 +37,25 @@ var userDne = function(user, cb) {
 }
 
 module.exports = {
-    login: function(req, res, next) {
-        var user = req.body;
-        console.log('login');
-        userDne(user.username, function(userExists) {
+    login: function(response, body) {
+        userDne(body.usernameInput, function(userExists) {
             if (userExists) {
                 console.log('user exists, checking passwords');
-                if (bcrypt.compareSync(user.password, userExists.password)) { //need to make sure userExists is the passworddb
-                    console.log('req session ', req.session);
-                    console.log('sessionID ', req.sessionID);
-                    console.log('session before setting user.username signup ', req.session);
-                    req.session.email = user.username;
-                    console.log('session after creation ', req.session);
-
-                    res.status(201).json({
+                if (bcrypt.compareSync(body.passwordInput, userExists.password)) { //need to make sure userExists is the passworddb
+                    response.respond({
                         status: 'user authenticated'
                     });
                 } else {
-                    res.status(400).json({
+                    response.respond({
                         error: 'User or Password invalid'
                     });
                 }
             } else {
-                res.status(400).json({
+                response.respond({
                     error: 'User or Password invalid'
                 });
             }
-        })
+        });
     },
     signup: function(response, body) {
         console.log('body', body)

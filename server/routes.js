@@ -1,7 +1,4 @@
 var user = require('./db/userController.js');
-
-
-
 var Response = function(connection, id){
   this.connection = connection;
   this.id = id;
@@ -11,20 +8,26 @@ Response.prototype.respond = function(data){
   var obj = {
     body: data,
     id: this.id
-  }
-  this.connection.sendUTF(obj);
-}
+  };
+  console.log('obj ', obj);
+  this.connection.sendUTF(JSON.stringify(obj));
+};
 
 function socketRouter (connection) {
   connection.on('message', function(message) {
       if (message.type === 'utf8') {
-          console.log('Received Message: ' + message.utf8Data);
-          var response = new Response(connection, message.utf8Data.id);
-          var data = JSON.parse(message.utf8Data)
+          var data  = JSON.parse(message.utf8Data);
+          console.log('utf8Data ' + data);
+          var response = new Response(connection, data.id);
+          console.log('Response ' + response.id);
+
           switch (data.url) {
             case '/signup':
               user.signup(response, data.body);
-              break
+              break;
+              case '/login':
+              user.login(response, data.body);
+              break;
           }
           // connection.sendUTF(message.utf8Data);
       }
@@ -40,4 +43,4 @@ function socketRouter (connection) {
 
 module.exports = {
   socketRouter: socketRouter
-}
+};

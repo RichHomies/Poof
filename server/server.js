@@ -54,10 +54,7 @@ function init(){
 
         var connection = request.accept('echo-protocol', request.origin);
         console.log((new Date()) + ' Connection accepted.' + JSON.stringify(Object.keys(connection)));
-        
         socketRouter(connection);
-
-        
     });
 }
 
