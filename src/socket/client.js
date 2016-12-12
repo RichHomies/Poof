@@ -12,38 +12,37 @@ var ws = require('./socketConnection');
 
 var SocketLibrary = function(socket){
     this.socket = socket;
-    this.openRequests = {
-      //uuid : cb
-    };
+    this.openRequests = {};
+    this.subscribe();
 };
 
 SocketLibrary.prototype.sendMessage = function(url, body){
     var id = uuid.v1();
-    var str = JSON.stringify({id:id, url: url, body:body});
+    var str = JSON.stringify({id:id, url: url, body: body});
     this.socket.send(str);
+    var that = this
     return {
       success: function(cb) {
-        this.openRequests[id] = cb;
+        that.openRequests[id] = cb;
       }
     }
 };
 
 SocketLibrary.prototype.subscribe = function(){
-    this.socket.onmessage(function(message) {
-        var obj = JSON.parse(message);
-        var fn = this.openRequests[obj.id];
-        fn(obj.body);
-        delete this.openRequests[obj.id]
-        // cb(obj);
-            
-    });  
+    this.socket.onmessage = function(message) {
+        //shit we stuck
+        console.log('message ', Object.keys(message.data));
+        var cb = this.openRequests[message.data.id];
+        cb(message.data.body);
+        delete this.openRequests[message.data.id]            
+    };  
 };
 
 
 
-ws.then(function(socket){
+var biblioteca = ws.then(function(socket){
     var socketbiblioteca = new SocketLibrary(socket);
     return socketbiblioteca;
 });
 
-module.exports = ws;
+module.exports = biblioteca;

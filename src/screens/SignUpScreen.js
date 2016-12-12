@@ -52,29 +52,29 @@ export default class SignUpScreen extends Component {
           <List>
             <ListItem>
               <InputGroup>
-                <Input inlineLabel label="Name" value={this.state.form.nameInput} onChange={updateNameInput} placeholder="NAME" />
+                <Input inlineLabel label="Name" value={this.state.form.nameInput} onChangeText={updateNameInput} placeholder="NAME" />
               </InputGroup>
             </ListItem>
             <ListItem>
               <InputGroup>
                 <Icon name="ios-person" style={{ color: '#0A69FE' }} />
-                <Input placeholder="USERNAME" value={this.state.form.usernameInput} onChange={updateUsernameInput} />
+                <Input placeholder="USERNAME" value={this.state.form.usernameInput} onChangeText={updateUsernameInput} />
               </InputGroup>
             </ListItem>
             <ListItem>
               <InputGroup>
                 <Icon name="ios-unlock" style={{ color: '#0A69FE'}}/>
-                <Input placeholder="PASSWORD" secureTextEntry value={this.state.form.passwordInput} onChange={updatePasswordInput}  />
+                <Input placeholder="PASSWORD" secureTextEntry value={this.state.form.passwordInput} onChangeText={updatePasswordInput}  />
               </InputGroup>
             </ListItem>
             <ListItem>
               <InputGroup>
                 <Icon name="ios-call" style={{ color: '#0A69FE'}} />
-                <Input placeholder="PHONE" keyboardType="numeric" value={this.state.form.phoneInput} onChange={updatePhoneInput} />
+                <Input placeholder="PHONE" keyboardType="numeric" value={this.state.form.phoneInput} onChangeText={updatePhoneInput} />
               </InputGroup>
             </ListItem>
           </List>
-          <Button style={{ alignSelf: 'center', marginTop: 20, marginBottom: 20 }}>
+          <Button onPress={this.onSignUpPress.bind(this)} style={{ alignSelf: 'center', marginTop: 20, marginBottom: 20 }}>
             Sign Up
           </Button>
         </Content>
@@ -83,20 +83,19 @@ export default class SignUpScreen extends Component {
   }
   onSignUpPress(e) {
     e.preventDefault()
-    var name = this.state.form.nameInput
-    var username = this.state.form.userNameInput
-    var password = this.state.form.passwordInput
-    var phone = this.state.form.phoneInput
-    ws.sendMessage('/signup', {
-      name,
-      username,
-      password,
-      phone
-    }).success()
+    var that = this
+    ws.then(function(socket) {
+      socket.sendMessage('/signup', that.state.form)
+      .success(function(response) {
+        console.log('success ', response);
+      });
+    })
   }
-  updateInput(key, e) {
-    var obj = {}
-    obj[key] = e.target.value
-    this.setState(obj)
+  updateInput(key, text) {
+    var form = this.state.form
+    form[key] = text
+    this.setState({
+      form
+    })
   }
 }

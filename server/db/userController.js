@@ -1,5 +1,5 @@
 var bcrypt = require('bcryptjs');
-var UserModel = require('./db').userModel;
+var UserModel = require('./schemas.js').userModel;
 
 
 var comparePasswords = function(passwordProvided, passwordDb, callback) {
@@ -65,32 +65,24 @@ module.exports = {
             }
         })
     },
-    signup: function(req, res, next) {
-        var user = req.body;
-        console.log('signup');
-        console.log('req session ', req.session);
+    signup: function(response, body) {
+        console.log('body', body)
 
-        userDne(user.username, function(userExists) {
+        userDne(body.usernameInput, function(userExists) {
             if (userExists) {
-                res.status(400).json({
-                    status: 'user exists'
-                });
+                console.log('huh?', userExists)
             } else {
                 console.log('generating salt');
-                var salt = generateHashedPassword(user.password);
+                var salt = generateHashedPassword(body.passwordInput);
                 var newUser = new UserModel({
-                    username: user.username,
-                    password: salt
+                    username: body.usernameInput,
+                    password: salt,
+                    phone: body.phoneInput,
+                    name: body.nameInput
                 })
                 newUser.save(function(err, newDood) {
                     if (err) return console.error(err);
-                    console.log('sessionID ', req.sessionID);
-                    console.log('session before setting user.username signup ', req.session);
-                    req.session.email = user.username;
-                    console.log('session after creation ', req.session);
-                    res.status(201).json({
-                        status: 'user created'
-                    });
+                    response.respond(newDood)
                 });
             }
         });

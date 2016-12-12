@@ -1,9 +1,13 @@
+var user = require('./db/userController.js');
+
+
+
 var Response = function(connection, id){
   this.connection = connection;
   this.id = id;
 };
 
-Response.prototype.respond(data){
+Response.prototype.respond = function(data){
   var obj = {
     body: data,
     id: this.id
@@ -16,10 +20,10 @@ function socketRouter (connection) {
       if (message.type === 'utf8') {
           console.log('Received Message: ' + message.utf8Data);
           var response = new Response(connection, message.utf8Data.id);
-          
-          switch (message.utf8Data.url) {
+          var data = JSON.parse(message.utf8Data)
+          switch (data.url) {
             case '/signup':
-              handleSignup(response);
+              user.signup(response, data.body);
               break
           }
           // connection.sendUTF(message.utf8Data);
@@ -29,11 +33,11 @@ function socketRouter (connection) {
           // connection.sendBytes(message.binaryData);
       }
   });
+  connection.on('close', function(reasonCode, description) {
+      console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+  });
 }
 
-
-function handleSignup(response) {
-  //use mongoose to create new account
-  
-  //signup
+module.exports = {
+  socketRouter: socketRouter
 }

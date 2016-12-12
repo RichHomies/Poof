@@ -11,6 +11,9 @@ var server = http.createServer(function(request, response) {
     response.end();
 });
 
+
+var socketRouter = require('./routes.js').socketRouter
+
 server.listen(8080, function() {
     console.log((new Date()) + ' Server is listening on port 8080');
 });
@@ -52,11 +55,9 @@ function init(){
         var connection = request.accept('echo-protocol', request.origin);
         console.log((new Date()) + ' Connection accepted.' + JSON.stringify(Object.keys(connection)));
         
-        
+        socketRouter(connection);
 
-        connection.on('close', function(reasonCode, description) {
-            console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-        });
+        
     });
 }
 

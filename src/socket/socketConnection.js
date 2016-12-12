@@ -1,12 +1,9 @@
 var client = new WebSocket('ws://localhost:8080/', "echo-protocol");
 
-
-
 function connectClient(){
     return new Promise(function (resolve, reject) {
         client.onopen = function() {
             console.log('WebSocket Client Connected');
-
             resolve(client);
         };
 
