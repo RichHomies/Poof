@@ -28,6 +28,7 @@ wsServer = new WebSocketServer({
     autoAcceptConnections: false
 });
 
+mongoose.Promise = global.Promise;
 mongoose.connect(dbUrl);
 
 db.on('error', console.error.bind(console, 'connection error:'));

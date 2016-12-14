@@ -58,11 +58,10 @@ module.exports = {
         });
     },
     signup: function(response, body) {
-        console.log('body', body)
 
         userDne(body.usernameInput, function(userExists) {
             if (userExists) {
-                console.log('huh?', userExists)
+                console.log('huh?', userExists);
             } else {
                 console.log('generating salt');
                 var salt = generateHashedPassword(body.passwordInput);
@@ -71,10 +70,10 @@ module.exports = {
                     password: salt,
                     phone: body.phoneInput,
                     name: body.nameInput
-                })
+                });
                 newUser.save(function(err, newDood) {
                     if (err) return console.error(err);
-                    response.respond(newDood)
+                    response.respond(newDood);
                 });
             }
         });

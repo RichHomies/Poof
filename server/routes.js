@@ -17,9 +17,7 @@ function socketRouter (connection) {
   connection.on('message', function(message) {
       if (message.type === 'utf8') {
           var data  = JSON.parse(message.utf8Data);
-          console.log('utf8Data ' + data);
           var response = new Response(connection, data.id);
-          console.log('Response ' + response.id);
 
           switch (data.url) {
             case '/signup':

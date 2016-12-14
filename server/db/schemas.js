@@ -6,9 +6,17 @@ var userSchema = new Schema({
   username: String,
   password: String,
   phone: String,
-  friends: String
+  friends: String,
+  poofs: [String]
+});
+
+var poofSchema = new Schema({
+    from: String,
+    to: [String],
+    text: String
 });
 
 module.exports = {
-  userModel : mongoose.model('User', userSchema)
+  userModel : mongoose.model('User', userSchema),
+  poofModel : mongoose.model('Poof', poofSchema)
 };
