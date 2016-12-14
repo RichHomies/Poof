@@ -15,10 +15,10 @@ db.once('open', function() {
 
 function runTests() {
 
-    poof.create('joe','zach', 'yoads')
+    poof.create('joe',['zach', 'steve'], 'yoads')
         .then(function(data){
             console.log('created data', data);
-            return poof.findByCriteria('to', 'zach');
+            return poof.findByCriteria('to', 'steve');
         })
         .then(function(data){
             console.log('criteria find', data);

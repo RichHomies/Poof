@@ -1,9 +1,10 @@
 var poofModel = require('./schemas.js').poofModel;
 
 var create = function(from, to, text){
+
     var promise = new poofModel({
                     from: from,
-                    to: [to],
+                    to: to,
                     text: text
                 });
     console.log('1');
