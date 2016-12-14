@@ -6,9 +6,7 @@ var create = function(from, to, text){
                     from: from,
                     to: to,
                     text: text
-                });
-    console.log('1');
-    
+                });    
     return promise.save();
 };
 

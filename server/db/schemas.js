@@ -7,12 +7,12 @@ var userSchema = new Schema({
   password: String,
   phone: String,
   friends: String,
-  poofs: [String]
+  poofs: [{ type: Schema.Types.ObjectId, ref: 'Poof' }]
 });
 
 var poofSchema = new Schema({
-    from: String,
-    to: [String],
+    from: { type: Schema.Types.ObjectId, ref: 'User' },
+    to: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     text: String
 });
 
