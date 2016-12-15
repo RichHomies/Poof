@@ -27,7 +27,8 @@ export default class SignUpScreen extends Component {
         usernameInput: '',
         passwordInput: '',
         phoneInput: ''
-      }
+      },
+      status: ''
     }
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
@@ -88,7 +89,17 @@ export default class SignUpScreen extends Component {
       socket.sendMessage('/signup', that.state.form)
       .success(function(response) {
         console.log('success ', response);
-      });
+        that.state.status = 'success'
+        that.props.navigator.push({
+          screen: 'app.HomeScreen',
+          title: 'Poof Home'
+        })
+      })
+      .failure(function(err) {
+        console.log('err:', err)
+        that.state.status = err
+        //toast fail
+      })
     })
   }
   updateInput(key, text) {

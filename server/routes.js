@@ -4,8 +4,10 @@ var Response = function(connection, id){
   this.id = id;
 };
 
-Response.prototype.respond = function(data){
+Response.prototype.respond = function(data, status, err){
   var obj = {
+    error: err,
+    status: status,
     body: data,
     id: this.id
   };
@@ -18,7 +20,7 @@ function socketRouter (connection) {
       if (message.type === 'utf8') {
           var data  = JSON.parse(message.utf8Data);
           var response = new Response(connection, data.id);
-
+          console.log('data', data)
           switch (data.url) {
             case '/signup':
               user.signup(response, data.body);

@@ -18,23 +18,38 @@ var SocketLibrary = function(socket){
 
 SocketLibrary.prototype.sendMessage = function(url, body){
     var id = uuid.v1();
+    this.openRequests[id] = {};
     var str = JSON.stringify({id:id, url: url, body: body});
     this.socket.send(str);
     var that = this;
-    return {
+    var handlers = {
       success: function(cb) {
-        that.openRequests[id] = cb;
+        that.openRequests[id]['success'] = cb;
+        return handlers;
+      },
+      failure: function(cb) {
+        that.openRequests[id]['failure'] = cb;
+        return handlers;
       }
     };
+    
+    return handlers;
 };
 
 SocketLibrary.prototype.subscribe = function(){
     var that = this;
     this.socket.onmessage = function(message) {
         var data = JSON.parse(message.data);
-        var cb = that.openRequests[data.id];
-        cb(data.body);
-        delete that.openRequests[data.id];           
+        var requestObj = that.openRequests[data.id];
+        var cb;
+        if (data.status === 'success') {
+            cb = requestObj['success']
+            cb(data.body)
+        } else {
+            cb = requestObj['failure']
+            cb(data.error)
+        }
+        delete that.openRequests[data.id]; 
     };  
 };
 

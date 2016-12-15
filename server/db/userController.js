@@ -38,30 +38,30 @@ var userDne = function(user, cb) {
 
 module.exports = {
     login: function(response, body) {
+        console.log('body', body)
         userDne(body.usernameInput, function(userExists) {
             if (userExists) {
                 console.log('user exists, checking passwords');
                 if (bcrypt.compareSync(body.passwordInput, userExists.password)) { //need to make sure userExists is the passworddb
-                    response.respond({
-                        status: 'user authenticated'
-                    });
+
+                    response.respond('user authenticated', 'success');
+
                 } else {
-                    response.respond({
-                        error: 'User or Password invalid'
-                    });
+                    response.respond('User or Password invalid', 'failure', 'User or Password invalid');
                 }
             } else {
-                response.respond({
-                    error: 'User or Password invalid'
-                });
+                response.respond('User or Password invalid', 'failure', 'User or Password invalid');
+
             }
         });
     },
     signup: function(response, body) {
-
         userDne(body.usernameInput, function(userExists) {
             if (userExists) {
                 console.log('huh?', userExists);
+                //throw error if user exists
+                response.respond(null, 'failure', 'user exists already');
+
             } else {
                 console.log('generating salt');
                 var salt = generateHashedPassword(body.passwordInput);
@@ -72,8 +72,11 @@ module.exports = {
                     name: body.nameInput
                 });
                 newUser.save(function(err, newDood) {
-                    if (err) return console.error(err);
-                    response.respond(newDood);
+                    if (err) {
+                      response.respond(newDood, 'failure', 'signup failed');
+                    } else {
+                      response.respond(newDood, 'success');
+                    }
                 });
             }
         });
