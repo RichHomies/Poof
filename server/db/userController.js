@@ -1,6 +1,6 @@
 var bcrypt = require('bcryptjs');
 var UserModel = require('./schemas.js').userModel;
-
+var connectionStore = require('./connectionController.js').get();
 
 var comparePasswords = function(passwordProvided, passwordDb, callback) {
     bcrypt.compare(password, passwordDb, function(err, result) {
@@ -11,7 +11,7 @@ var comparePasswords = function(passwordProvided, passwordDb, callback) {
             callback(true);
         }
     });
-}
+};
 
 var generateHashedPassword = function(pass) {
     var salt = bcrypt.genSaltSync(10);
@@ -19,7 +19,7 @@ var generateHashedPassword = function(pass) {
     console.log('pass ', pass);
     var hash = bcrypt.hashSync(pass, salt);
     return hash;
-}
+};
 
 var userDne = function(user, cb) {
     console.log('user ', user);
@@ -33,17 +33,18 @@ var userDne = function(user, cb) {
             console.log('user find result ', user);
             cb(user);
         }
-    })
-}
+    });
+};
 
 module.exports = {
     login: function(response, body) {
-        console.log('body', body)
+        console.log('body', body);
         userDne(body.usernameInput, function(userExists) {
             if (userExists) {
                 console.log('user exists, checking passwords');
                 if (bcrypt.compareSync(body.passwordInput, userExists.password)) { //need to make sure userExists is the passworddb
 
+                    connectionStore.add(response.connection, body.usernameInput);
                     response.respond('user authenticated', 'success');
 
                 } else {
@@ -75,6 +76,7 @@ module.exports = {
                     if (err) {
                       response.respond(newDood, 'failure', 'signup failed');
                     } else {
+                      connectionStore.add(response.connection, body.usernameInput);
                       response.respond(newDood, 'success');
                     }
                 });

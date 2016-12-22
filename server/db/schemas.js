@@ -6,14 +6,16 @@ var userSchema = new Schema({
   username: String,
   password: String,
   phone: String,
-  friends: String,
-  poofs: [{ type: Schema.Types.ObjectId, ref: 'Poof' }]
+  friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  sentPoofs: [{ type: Schema.Types.ObjectId, ref: 'Poof' }],
+  receivedPoofs: [{ type: Schema.Types.ObjectId, ref: 'Poof' }]
 });
 
 var poofSchema = new Schema({
     from: { type: Schema.Types.ObjectId, ref: 'User' },
-    to: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    text: String
+    to: { type: Schema.Types.ObjectId, ref: 'User' },
+    text: String,
+    duration: Number
 });
 
 module.exports = {
