@@ -16,10 +16,10 @@ var SocketLibrary = function(socket){
     this.subscribe();
 };
 
-SocketLibrary.prototype.sendMessage = function(url, body){
+SocketLibrary.prototype.sendMessage = function(url, action, body){
     var id = uuid.v1();
     this.openRequests[id] = {};
-    var str = JSON.stringify({id:id, url: url, body: body});
+    var str = JSON.stringify({id:id, url: url, action: action, body: body});
     this.socket.send(str);
     var that = this;
     var handlers = {
