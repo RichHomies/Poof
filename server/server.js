@@ -12,7 +12,7 @@ var server = http.createServer(function(request, response) {
 });
 
 
-var socketRouter = require('./routes.js').socketRouter
+var socketRouter = require('./routes.js').socketRouter;
 
 server.listen(8080, function() {
     console.log((new Date()) + ' Server is listening on port 8080');
@@ -49,12 +49,12 @@ function init(){
         if (!originIsAllowed(request.origin)) {
           // Make sure we only accept requests from an allowed origin
           request.reject();
-          console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
+          console.log((new Date()) + ' Connection from origin ' + Object.keys(request.httpRequest) + ' rejected.');
           return;
         }
 
         var connection = request.accept('echo-protocol', request.origin);
-        console.log(' Wsserver: ' + wsServer.connections[0]);
+        console.log(' Wsserver: ' + request.host);
         socketRouter(connection);
     });
 }

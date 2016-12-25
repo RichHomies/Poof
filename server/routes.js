@@ -4,6 +4,26 @@ var Response = function(connection, id){
   this.id = id;
 };
 
+var ActionRouter = function (){
+  this.store = {};
+};
+
+ActionRouter.prototype.register = function(url, verb, fn){
+  if(this.store[url]){
+    this.store[url][verb] = fn;
+  } else {
+    this.store[url] = {};
+    this.store[url][verb] = fn;
+
+  }
+};
+
+ActionRouter.prototype.datWay = function(connection, message){
+  var data  = JSON.parse( message.utf8Data);
+  var response = new Response(connection, data.id);
+  this.store[data.url][data.action](response, data.body);
+};
+
 Response.prototype.respond = function(data, status, err){
   var obj = {
     error: err,
@@ -15,26 +35,17 @@ Response.prototype.respond = function(data, status, err){
   this.connection.sendUTF(JSON.stringify(obj));
 };
 
+var actionRouter = new ActionRouter();
+actionRouter.register('/signup', 'post', user.signup);
+actionRouter.register('/login', 'post', user.login);
+actionRouter.register('/poof', 'post', function(response, body){
+  console.log(body);
+});
+
+
 function socketRouter (connection) {
   connection.on('message', function(message) {
-      if (message.type === 'utf8') {
-          var data  = JSON.parse(message.utf8Data);
-          var response = new Response(connection, data.id);
-          console.log('data', data)
-          switch (data.url) {
-            case '/signup':
-              user.signup(response, data.body);
-              break;
-              case '/login':
-              user.login(response, data.body);
-              break;
-          }
-          // connection.sendUTF(message.utf8Data);
-      }
-      else if (message.type === 'binary') {
-          console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-          // connection.sendBytes(message.binaryData);
-      }
+    actionRouter.datWay(connection, message);
   });
   connection.on('close', function(reasonCode, description) {
       console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
