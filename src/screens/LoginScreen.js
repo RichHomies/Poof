@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import ReactNative from 'react-native';
 import { Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Picker, Button } from 'native-base';
 const Item = Picker.Item;
+var  { AsyncStorage } =  ReactNative;
 
 import ws from '../socket/client.js';
 
@@ -12,38 +14,52 @@ export default class LoginScreen extends Component {
         usernameInput: '',
         passwordInput: ''
       }
-    }
+    };
   }
   onSignUpPress() {
     this.props.navigator.showModal({
       title: 'Sign Up',
       screen: 'app.SignUpScreen'
-    })
+    });
   }
   onLoginPress(e) {
     e.preventDefault();
-    var that = this
+    var that = this;
     ws.then(function(socket) {
       console.log('that state form', that.state.form);
       socket.sendMessage('/login', 'post', that.state.form)
       .success(function(response) {
-        that.props.navigator.push({
-          'screen': 'app.HomeScreen',
-          'title': 'Poof Home'
-        })
+        console.log('login response ', response);
+        try {
+          
+          AsyncStorage.setItem('sessionId', JSON.stringify(response._id))
+            .then(function(val){
+              return AsyncStorage.getItem('sessionId');
+            })
+            .then(function(val){
+              that.props.navigator.push({
+                'screen': 'app.HomeScreen',
+                'title': 'Poof Home'
+              });
+            });
+
+        } catch (error) {
+         console.log('err', error);
+        }
+
       })
       .failure(function(err) {
-        console.log('loginErr', err)
-      })
-    })
+        console.log('loginErr', err);
+      });
+    });
     
   }
   updateInput(key, text) {
-    var form = this.state.form
-    form[key] = text
+    var form = this.state.form;
+    form[key] = text;
     this.setState({
       form
-    })
+    });
   }
   render() {
     let updateUsernameInput = this.updateInput.bind(this, 'usernameInput');
