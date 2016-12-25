@@ -38,21 +38,16 @@ var userDne = function(user, cb) {
 
 module.exports = {
     login: function(response, body) {
-        console.log('body', body);
         userDne(body.usernameInput, function(userExists) {
-            if (userExists) {
-                console.log('user exists, checking passwords');
-                if (bcrypt.compareSync(body.passwordInput, userExists.password)) { //need to make sure userExists is the passworddb
-
-                    connectionStore.add(response.connection, body.usernameInput);
-                    response.respond('user authenticated', 'success');
-
-                } else {
-                    response.respond('User or Password invalid', 'failure', 'User or Password invalid');
-                }
+            if (userExists && bcrypt.compareSync(body.passwordInput, userExists.password)) {
+                connectionStore.add(response.connection, userExists._id);
+                response.respond({
+                    _id: userExists._id,
+                    receivedPoofs: userExists.receivedPoofs,
+                    friends: userExists.friends
+                  }, 'success');
             } else {
                 response.respond('User or Password invalid', 'failure', 'User or Password invalid');
-
             }
         });
     },
@@ -64,7 +59,6 @@ module.exports = {
                 response.respond(null, 'failure', 'user exists already');
 
             } else {
-                console.log('generating salt');
                 var salt = generateHashedPassword(body.passwordInput);
                 var newUser = new UserModel({
                     username: body.usernameInput,
@@ -72,12 +66,20 @@ module.exports = {
                     phone: body.phoneInput,
                     name: body.nameInput
                 });
+
                 newUser.save(function(err, newDood) {
                     if (err) {
                       response.respond(newDood, 'failure', 'signup failed');
                     } else {
-                      connectionStore.add(response.connection, body.usernameInput);
-                      response.respond(newDood, 'success');
+                      console.log('logged in', newDood);
+                      connectionStore.add(response.connection, newDood._id);
+
+                      response.respond({
+                        _id: newDood._id,
+                        receivedPoofs: newDood.receivedPoofs,
+                        friends: newDood.friends
+                      }, 'success');
+
                     }
                 });
             }
