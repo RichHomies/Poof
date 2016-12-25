@@ -86,7 +86,7 @@ export default class SignUpScreen extends Component {
     e.preventDefault()
     var that = this
     ws.then(function(socket) {
-      socket.sendMessage('/signup', that.state.form)
+      socket.sendMessage('/signup', 'post', that.state.form)
       .success(function(response) {
         console.log('success ', response);
         that.state.status = 'success'

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Header, Footer, Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Picker, Button, Item } from 'native-base';
 
+import ws from '../socket/client.js';
+
 export default class NewPoofScreen extends Component {
   constructor(props) {
     super(props)
@@ -12,6 +14,16 @@ export default class NewPoofScreen extends Component {
   onValueChange(value: string) {
     this.setState({
         selected1: value,
+    });
+  }
+  onSendPoof() {
+    var that = this;
+    ws.then(function(socket) {
+      socket.sendMessage('/poof', 'post', {
+        recipient: 'joe',
+        sender: 'zack',
+        message: 'hello'
+      })
     });
   }
   render() {
@@ -45,7 +57,7 @@ export default class NewPoofScreen extends Component {
           </List>
         </Content>
         <Footer>
-          <Button>Send Poof</Button>
+          <Button onPress={this.onSendPoof.bind(this)}>Send Poof</Button>
         </Footer>
       </Container>
       )

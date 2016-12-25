@@ -8,6 +8,7 @@ var ActionRouter = function (){
   this.store = {};
 };
 
+
 ActionRouter.prototype.register = function(url, verb, fn){
   if(this.store[url]){
     this.store[url][verb] = fn;
@@ -23,6 +24,7 @@ ActionRouter.prototype.datWay = function(connection, message){
   var response = new Response(connection, data.id);
   this.store[data.url][data.action](response, data.body);
 };
+
 
 Response.prototype.respond = function(data, status, err){
   var obj = {
