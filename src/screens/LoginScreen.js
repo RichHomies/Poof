@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import ReactNative from 'react-native';
 import { Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Picker, Button } from 'native-base';
-const Item = Picker.Item;
-var  { AsyncStorage } =  ReactNative;
-
 import ws from '../socket/client.js';
+import storage from '../storage.js';
+const Item = Picker.Item;
+
 
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -30,23 +29,13 @@ export default class LoginScreen extends Component {
       socket.sendMessage('/login', 'post', that.state.form)
       .success(function(response) {
         console.log('login response ', response);
-        try {
-          
-          AsyncStorage.setItem('sessionId', JSON.stringify(response._id))
-            .then(function(val){
-              return AsyncStorage.getItem('sessionId');
-            })
-            .then(function(val){
-              that.props.navigator.push({
-                'screen': 'app.HomeScreen',
-                'title': 'Poof Home'
-              });
+        storage.save('sessionId', response._id)
+          .then(function(val){
+            that.props.navigator.push({
+              'screen': 'app.HomeScreen',
+              'title': 'Poof Home'
             });
-
-        } catch (error) {
-         console.log('err', error);
-        }
-
+          });
       })
       .failure(function(err) {
         console.log('loginErr', err);

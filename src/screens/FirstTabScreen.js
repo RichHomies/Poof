@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import socketClient from '../socket/client';
 
-
 import {
   Text,
   View,
