@@ -48,15 +48,19 @@ var deleteAll = function(){
   });
 };
 
-var editUser = function(id, obj){
+var editUser = function(id, obj, poof){
   return new Promise(function (resolve, reject) {
     userModel.update({ _id: id }, { $set: obj }, function(err, user){
       if(err){
         console.log('err ' , err);
         reject(err);
       } else {
-        console.log('successfully edited Project ');
-        resolve('successfully edited Project ');
+        console.log('successfully edited User ');
+        if (poof) {
+          resolve(poof);
+        } else {
+          resolve('Successfully Edited User')
+        }
       }
     });
   });

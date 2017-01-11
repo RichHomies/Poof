@@ -6,14 +6,14 @@ var userSchema = new Schema({
   username: String,
   password: String,
   phone: String,
-  friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  sentPoofs: [{ type: Schema.Types.ObjectId, ref: 'Poof' }],
-  receivedPoofs: [{ type: Schema.Types.ObjectId, ref: 'Poof' }]
+  friends: [String],
+  sentPoofs: [String],
+  receivedPoofs: [String]
 });
 
 var poofSchema = new Schema({
-    from: { type: Schema.Types.ObjectId, ref: 'User' },
-    to: { type: Schema.Types.ObjectId, ref: 'User' },
+    from: String,
+    to: String,
     text: String,
     duration: Number
 });

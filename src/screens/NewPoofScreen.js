@@ -20,8 +20,8 @@ export default class NewPoofScreen extends Component {
     var that = this;
     ws.then(function(socket) {
       socket.sendMessage('/poof', 'post', {
-        recipient: 'joe',
-        sender: 'zack',
+        recipient: 'Joe',
+        sender: 'Z',
         message: 'hello'
       })
     });

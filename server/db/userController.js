@@ -1,7 +1,6 @@
 var bcrypt = require('bcryptjs');
 var UserModel = require('./schemas.js').userModel;
 var connectionStore = require('./connectionController.js').get();
-
 var comparePasswords = function(passwordProvided, passwordDb, callback) {
     bcrypt.compare(password, passwordDb, function(err, result) {
         console.log('password ', password, result);
@@ -22,7 +21,6 @@ var generateHashedPassword = function(pass) {
 };
 
 var userDne = function(user, cb) {
-    console.log('user ', user);
     UserModel.findOne({
         username: user
     }, function(err, user) {
@@ -30,7 +28,6 @@ var userDne = function(user, cb) {
             console.log('err ', err);
             cb(false);
         } else {
-            console.log('user find result ', user);
             cb(user);
         }
     });
@@ -115,5 +112,22 @@ module.exports = {
         res.status(200).json({
             status: 'Logout successful'
         });
+    },
+    findUser: function(user, cb) {
+      return UserModel.findOne({ username: user}).exec();
+    },
+    editUser: function(id, obj){
+      return new Promise(function (resolve, reject) {
+        UserModel.update({ _id: id }, { $set: obj }, function(err, user){
+          if(err){
+            console.log('err ' , err);
+            reject(err);
+          } else {
+            console.log('successfully edited User ');
+            resolve('successfully edited User ');
+          }
+        });
+      });
     }
+
 };
