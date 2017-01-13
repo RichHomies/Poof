@@ -14,7 +14,8 @@ var findPoofByCriteria = function(criteria, value){
     var lookup = {
         from: 'from',
         to: 'to',
-        text: 'text'
+        text: 'text',
+        id: '_id'
     };
 
     var obj = {};

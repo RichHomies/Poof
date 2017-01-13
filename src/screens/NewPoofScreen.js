@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Header, Footer, Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Picker, Button, Item } from 'native-base';
+import storage from '../storage.js';
 
 import ws from '../socket/client.js';
 
@@ -18,13 +19,19 @@ export default class NewPoofScreen extends Component {
   }
   onSendPoof() {
     var that = this;
-    ws.then(function(socket) {
-      socket.sendMessage('/poof', 'post', {
-        recipient: 'Joe',
-        sender: 'Z',
-        message: 'hello'
-      })
-    });
+    //get id from async
+    storage.get('sessionId').then(function(id){
+      ws.then(function(socket) {
+        socket.sendMessage('/poof', 'post', {
+          recipient: 'Z',
+          sender: 'Joe',
+          message: 'test test',
+          id: id
+        })
+      });
+    })
+
+  
   }
   render() {
     return (

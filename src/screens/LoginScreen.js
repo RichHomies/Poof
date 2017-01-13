@@ -25,17 +25,19 @@ export default class LoginScreen extends Component {
     e.preventDefault();
     var that = this;
     ws.then(function(socket) {
-      console.log('that state form', that.state.form);
       socket.sendMessage('/login', 'post', that.state.form)
       .success(function(response) {
-        console.log('login response ', response);
         storage.save('sessionId', response._id)
           .then(function(val){
+            
+            return storage.get('sessionId')
+          })
+          .then(function(id) {
             that.props.navigator.push({
               'screen': 'app.HomeScreen',
               'title': 'Poof Home'
             });
-          });
+          })
       })
       .failure(function(err) {
         console.log('loginErr', err);

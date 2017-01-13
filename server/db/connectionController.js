@@ -14,7 +14,7 @@ ConnectionStore.prototype.get = function(uuid){
     if(!this.store[uuid]){
         return false;
     } 
-    return connection;
+    return this.store[uuid];
 };
 
 ConnectionStore.prototype.delete = function(uuid){

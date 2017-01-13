@@ -116,6 +116,9 @@ module.exports = {
     findUser: function(user, cb) {
       return UserModel.findOne({ username: user}).exec();
     },
+    findUserById: function(id, cb) {
+      return UserModel.findOne({ _id: id}).exec();
+    },
     editUser: function(id, obj){
       return new Promise(function (resolve, reject) {
         UserModel.update({ _id: id }, { $set: obj }, function(err, user){

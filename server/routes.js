@@ -46,13 +46,15 @@ actionRouter.register('/poof', 'post', function(response, body){
     //Results[0] is the sender, Results[1] is the recipient
     results = resultz
     return poof.create(body.sender, body.recipient, body.message)
-    
   })
   .then(function(poof) {
-    return user.editUser(results[0]._id, {sentPoofs: results[0].sentPoofs.push(poof._id)})
-  })
-  .then(function(poof) {
-    return user.editUser(results[0]._id, {sentPoofs: results[1].receivedPoofs.push(poof._id)})
+    console.log('poof id', poof._id)
+    results[0].sentPoofs.push(poof._id)
+    user.editUser(results[0]._id, {sentPoofs: results[0].sentPoofs})
+    .then(function() {
+      results[1].receivedPoofs.push(poof._id)
+      return user.editUser(results[1]._id, {receivedPoofs: results[1].receivedPoofs})
+    })
   })
   .then(function() {
     response.respond('Successfully sent message', 'success');
@@ -60,9 +62,24 @@ actionRouter.register('/poof', 'post', function(response, body){
   .catch(function(e) {
     console.log('whaaaa', e)
   })
-
-
 });
+
+actionRouter.register('/poof', 'get', function(response, body){
+  user.findUserById(body.id)
+  .then(function(person) {
+    var received = person.receivedPoofs.map(function(val, i) {
+      return poof.findByCriteria('id', val)
+    })
+    Promise.all(received).then(function(results) {
+      console.log('results', results)
+      response.respond(results, 'success')
+    })
+  })
+  .catch(function(e) {
+    console.log('wtf', e)
+  })
+})
+
 
 function socketRouter (connection) {
   connection.on('message', function(message) {
